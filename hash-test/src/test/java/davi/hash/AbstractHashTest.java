@@ -7,11 +7,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class CryptTest {
+public abstract class AbstractHashTest {
 
 	protected HashAlgorithm alg;
 
-	public CryptTest() {
+	public AbstractHashTest() {
 		super();
 	}
 
