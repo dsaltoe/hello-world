@@ -5,6 +5,7 @@
 	<groupId>davi.hash</groupId>
 	<artifactId>hash-test-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>hash-test</module>
