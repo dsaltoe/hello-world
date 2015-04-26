@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class CryptTest {
 
-	protected Algoritmo alg;
+	protected HashAlgorithm alg;
 
 	public CryptTest() {
 		super();

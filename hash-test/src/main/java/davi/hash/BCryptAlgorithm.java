@@ -2,11 +2,11 @@ package davi.hash;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class BCryptAlgoritmo extends Algoritmo {
+public class BCryptAlgorithm extends HashAlgorithm {
 
 	private int log_rounds;
 
-	public BCryptAlgoritmo(int log_rounds) {
+	public BCryptAlgorithm(int log_rounds) {
 		this.log_rounds = log_rounds;
 	}
 

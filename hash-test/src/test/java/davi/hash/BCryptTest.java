@@ -12,7 +12,7 @@ public class BCryptTest extends CryptTest {
 	
 	@Before
 	public void before() {
-		alg = new BCryptAlgoritmo(12);
+		alg = new BCryptAlgorithm(12);
 	}
 	
 	@Test

@@ -10,7 +10,7 @@ public class PBKDF2Test extends CryptTest {
 
 	@Before
 	public void before() {
-		alg = new BCryptAlgoritmo(12);
+		alg = new BCryptAlgorithm(12);
 	}
 	
 }

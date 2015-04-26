@@ -1,6 +1,6 @@
 package davi.hash;
 
-public abstract class Algoritmo {
+public abstract class HashAlgorithm {
 
 	public abstract String genSalt();
 
