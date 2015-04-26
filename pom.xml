@@ -8,6 +8,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>hash-test</module>
+		<module>hash-password</module>
 	</modules>
 </project>
