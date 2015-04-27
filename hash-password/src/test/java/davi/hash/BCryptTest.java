@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
+import davi.hashpassword.bcrypt.BCryptAlgorithm;
+
 public class BCryptTest extends AbstractHashTest {
 
 	private static final String SALT_11 = "$2a$11$lw27.WF3yC06eDo3vE2IT.";

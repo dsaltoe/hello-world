@@ -1,6 +1,8 @@
-package davi.hash;
+package davi.hashpassword.bcrypt;
 
 import org.mindrot.jbcrypt.BCrypt;
+
+import davi.hashpassword.HashAlgorithm;
 
 public class BCryptAlgorithm extends HashAlgorithm {
 

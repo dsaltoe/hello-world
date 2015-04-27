@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
+import davi.hashpassword.HashAlgorithm;
+
 public abstract class AbstractHashTest {
 
 	protected HashAlgorithm alg;

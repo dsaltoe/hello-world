@@ -1,4 +1,4 @@
-package davi.hash;
+package davi.hashpassword;
 
 public abstract class HashAlgorithm {
 
