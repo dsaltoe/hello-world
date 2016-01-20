@@ -1,20 +1,23 @@
-package davi.hash;
+package davi.hashpassword.tests;
 
-import static org.junit.Assert.*;
+import static davi.hashpassword.base.TestUtils.getPassword;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
-import davi.hashpassword.bcrypt.BCryptAlgorithm;
+import davi.hashpassword.base.AbstractKeyStretchingTest;
+import davi.hashpassword.bcrypt.JBCryptPasswordEncoder;
 
-public class BCryptTest extends AbstractHashTest {
+public class JBCryptPasswordEncoderTest extends AbstractKeyStretchingTest {
 
 	private static final String SALT_11 = "$2a$11$lw27.WF3yC06eDo3vE2IT.";
 	
 	@Before
 	public void before() {
-		alg = new BCryptAlgorithm(12);
+		alg = new JBCryptPasswordEncoder(12);
 	}
 	
 	@Test

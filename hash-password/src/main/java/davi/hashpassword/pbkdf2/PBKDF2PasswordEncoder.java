@@ -1,15 +1,14 @@
 package davi.hashpassword.pbkdf2;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-import davi.hashpassword.HashAlgorithm;
+import davi.hashpassword.KeyStretchingPasswordEncoder;
 
-public class PBKDF2Algorithm extends HashAlgorithm {
+public class PBKDF2PasswordEncoder implements KeyStretchingPasswordEncoder {
 
 
-	public PBKDF2Algorithm() {
+	public PBKDF2PasswordEncoder() {
 		// TODO algorithm parameters
 	}
 
@@ -19,7 +18,7 @@ public class PBKDF2Algorithm extends HashAlgorithm {
 	}
 
 	@Override
-	public String hash(String password, String salt) {
+	public String encode(String password, String salt) {
 		try {
 			return PasswordHash.createHash(password.toCharArray(), salt.getBytes());
 		} catch (NoSuchAlgorithmException e) {
@@ -30,7 +29,12 @@ public class PBKDF2Algorithm extends HashAlgorithm {
 	}
 
 	@Override
-	public boolean check(String password, String hashed) {
+	public String encode(String password) {
+		return encode(password, genSalt());
+	}
+	
+	@Override
+	public boolean matches(String password, String hashed) {
 		try {
 			return PasswordHash.validatePassword(password, hashed);
 		} catch (NoSuchAlgorithmException e) {

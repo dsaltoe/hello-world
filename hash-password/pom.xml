@@ -11,6 +11,13 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.3m</version>
 		</dependency>
+		
+	    <dependency>
+	        <groupId>org.springframework.security</groupId>
+	        <artifactId>spring-security-core</artifactId>
+	        <version>4.0.3.RELEASE</version>
+	    </dependency>
+    		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
