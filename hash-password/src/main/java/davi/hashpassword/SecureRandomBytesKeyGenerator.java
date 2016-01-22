@@ -19,7 +19,11 @@ public final class SecureRandomBytesKeyGenerator {
 	 * Creates a secure random key generator with a custom key length.
 	 */
 	public SecureRandomBytesKeyGenerator(int keyLength) {
-		this.random = new SecureRandom();
+		this(keyLength, new SecureRandom());
+	}
+
+	public SecureRandomBytesKeyGenerator(int keyLength, SecureRandom random) {
+		this.random = random;
 		this.keyLength = keyLength;
 	}
 
