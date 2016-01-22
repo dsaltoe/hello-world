@@ -1,7 +1,10 @@
 package davi.hashpassword.tests;
 
 import static davi.hashpassword.base.TestUtils.getPassword;
+import static davi.hashpassword.base.TestUtils.getPassword2;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.regex.Matcher;
@@ -10,6 +13,7 @@ import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 
+import davi.hashpassword.KeyStretchingPasswordEncoder;
 import davi.hashpassword.base.AbstractKeyStretchingTest;
 import davi.hashpassword.pbkdf2.impl.PBKDF2PasswordEncoder2;
 
@@ -42,5 +46,31 @@ public class PBKDF2PasswordEncoderTest extends AbstractKeyStretchingTest {
 		
 		assertEquals(24 * 2, salt.length());
 		assertEquals(64 * 2, hashedKey.length());
+	}
+
+	@Override
+	public void differentHashsForSamePasswordWithDifferentRoundsTest() {
+		KeyStretchingPasswordEncoder alg1 = new PBKDF2PasswordEncoder2(10000);
+		KeyStretchingPasswordEncoder alg2 = new PBKDF2PasswordEncoder2(15000);
+		KeyStretchingPasswordEncoder alg3 = new PBKDF2PasswordEncoder2(30000);
+		
+		String hashed1 = alg1.encode(getPassword());
+		String hashed2 = alg2.encode(getPassword());
+		
+		assertNotEquals(hashed1, hashed2);
+		
+		assertTrue(alg1.matches(getPassword(), hashed1));
+		assertTrue(alg1.matches(getPassword(), hashed2));
+		assertTrue(alg2.matches(getPassword(), hashed1));
+		assertTrue(alg2.matches(getPassword(), hashed2));
+		assertTrue(alg3.matches(getPassword(), hashed1));
+		assertTrue(alg3.matches(getPassword(), hashed2));
+
+		assertFalse(alg1.matches(getPassword2(), hashed1));
+		assertFalse(alg1.matches(getPassword2(), hashed2));
+		assertFalse(alg2.matches(getPassword2(), hashed1));
+		assertFalse(alg2.matches(getPassword2(), hashed2));
+		assertFalse(alg3.matches(getPassword2(), hashed1));
+		assertFalse(alg3.matches(getPassword2(), hashed2));
 	}
 }

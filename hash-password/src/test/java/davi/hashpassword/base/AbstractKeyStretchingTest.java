@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.mindrot.jbcrypt.BCrypt;
 
 import davi.hashpassword.KeyStretchingPasswordEncoder;
 
@@ -35,17 +34,9 @@ public abstract class AbstractKeyStretchingTest extends AbstractPasswordEncoderT
 		assertTrue(alg.matches(getPassword(), hashed1));
 		assertTrue(alg.matches(getPassword(), hashed2));
 	}
-	
+
 	@Test
-	public void differentHashsForSamePasswordWithDifferentRoundsTest() {
-		String hashed = BCrypt.hashpw(getPassword(), BCrypt.gensalt());
-		String hashed12 = BCrypt.hashpw(getPassword(), BCrypt.gensalt(12));
-		
-		assertNotEquals(hashed, hashed12);
-		
-		assertTrue(BCrypt.checkpw(getPassword(), hashed));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed12));
-	}
+	public abstract void differentHashsForSamePasswordWithDifferentRoundsTest();
 	
 	@Test
 	public void mesmo_salt_gera_dois_hashes_iguais() {

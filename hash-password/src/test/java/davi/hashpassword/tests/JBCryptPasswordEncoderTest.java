@@ -31,6 +31,18 @@ public class JBCryptPasswordEncoderTest extends AbstractKeyStretchingTest {
 		assertNotEquals(hashed, hashed12);
 	}
 
+	@Override
+	@Test
+	public void differentHashsForSamePasswordWithDifferentRoundsTest() {
+		String hashed = BCrypt.hashpw(getPassword(), BCrypt.gensalt());
+		String hashed12 = BCrypt.hashpw(getPassword(), BCrypt.gensalt(12));
+		
+		assertNotEquals(hashed, hashed12);
+		
+		assertTrue(BCrypt.checkpw(getPassword(), hashed));
+		assertTrue(BCrypt.checkpw(getPassword(), hashed12));
+	}
+	
 	@Test
 	public void testDiferentesSALTs_Mesmo_Hash2() {
 		String salt_10 = BCrypt.gensalt();
