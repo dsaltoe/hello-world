@@ -1,11 +1,10 @@
 package davi.hashpassword.tests;
 
 import static davi.hashpassword.base.TestUtils.getPassword;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
 import davi.hashpassword.base.AbstractKeyStretchingTest;
@@ -15,7 +14,7 @@ public class JBCryptPasswordEncoderTest extends AbstractKeyStretchingTest {
 
 	private static final String SALT_11 = "$2a$11$lw27.WF3yC06eDo3vE2IT.";
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		alg = new JBCryptPasswordEncoder(12);
 	}

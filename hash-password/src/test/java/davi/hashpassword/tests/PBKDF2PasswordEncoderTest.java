@@ -2,16 +2,13 @@ package davi.hashpassword.tests;
 
 import static davi.hashpassword.base.TestUtils.getPassword;
 import static davi.hashpassword.base.TestUtils.getPassword2;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import davi.hashpassword.KeyStretchingPasswordEncoder;
 import davi.hashpassword.base.AbstractKeyStretchingTest;
@@ -19,7 +16,7 @@ import davi.hashpassword.pbkdf2.impl.PBKDF2PasswordEncoder2;
 
 public class PBKDF2PasswordEncoderTest extends AbstractKeyStretchingTest {
 
-	@Before
+	@BeforeEach
 	public void before() {
 		alg = new PBKDF2PasswordEncoder2(10000);
 	}

@@ -1,11 +1,8 @@
 package davi.hashpassword.base;
 
 import static davi.hashpassword.base.TestUtils.getPassword;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import davi.hashpassword.KeyStretchingPasswordEncoder;
 
