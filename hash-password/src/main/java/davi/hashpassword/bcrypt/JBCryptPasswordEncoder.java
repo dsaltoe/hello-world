@@ -2,34 +2,34 @@ package davi.hashpassword.bcrypt;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import davi.hashpassword.KeyStretchingPasswordEncoder;
+import davi.hashpassword.KeyStretchingPasswordManager;
 
-public class JBCryptPasswordEncoder implements KeyStretchingPasswordEncoder {
+public class JBCryptPasswordEncoder implements KeyStretchingPasswordManager {
 
-	private int log_rounds;
+	private final int logRounds;
 
-	public JBCryptPasswordEncoder(int log_rounds) {
-		this.log_rounds = log_rounds;
+	public JBCryptPasswordEncoder(int logRounds) {
+		this.logRounds = logRounds;
 	}
 
 	@Override
 	public String genSalt() {
-		return BCrypt.gensalt(log_rounds);
+		return BCrypt.gensalt(logRounds);
 	}
 
 	@Override
-	public String encode(String password, String salt) {
-		return BCrypt.hashpw(new String(password), new String(salt));
+	public String hash(String password, String salt) {
+		return BCrypt.hashpw(password, salt);
 	}
 
 	@Override
-	public String encode(String password) {
-		return encode(password, genSalt());
+	public String hash(String password) {
+		return hash(password, genSalt());
 	}
 	
 	@Override
 	public boolean matches(String password, String hashed) {
-		return BCrypt.checkpw(new String(password), new String(hashed));
+		return BCrypt.checkpw(password, hashed);
 	}
 
 }

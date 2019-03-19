@@ -1,70 +1,41 @@
 package davi.hashpassword.tests;
 
-import static davi.hashpassword.base.TestUtils.getPassword;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mindrot.jbcrypt.BCrypt;
+import davi.hashpassword.KeyStretchingPasswordManager;
 
 import davi.hashpassword.base.AbstractKeyStretchingTest;
 import davi.hashpassword.bcrypt.JBCryptPasswordEncoder;
 
+import java.util.regex.Pattern;
+
 public class JBCryptPasswordEncoderTest extends AbstractKeyStretchingTest {
 
-	private static final String SALT_11 = "$2a$11$lw27.WF3yC06eDo3vE2IT.";
-	
-	@BeforeEach
-	public void before() {
-		alg = new JBCryptPasswordEncoder(12);
-	}
-	
-	@Test
-	public void testDiferentesSALTs_e_fatores_Mesmo_Hash() {
-		String hashed = BCrypt.hashpw(getPassword(), BCrypt.gensalt());
-		String hashed12 = BCrypt.hashpw(getPassword(), BCrypt.gensalt(12));
-		
-		assertTrue(BCrypt.checkpw(getPassword(), hashed));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed12));
-
-		assertNotEquals(hashed, hashed12);
+	@Override
+	protected KeyStretchingPasswordManager createAlg(Integer rounds) {
+		return new JBCryptPasswordEncoder(rounds);
 	}
 
 	@Override
-	@Test
-	public void differentHashsForSamePasswordWithDifferentRoundsTest() {
-		String hashed = BCrypt.hashpw(getPassword(), BCrypt.gensalt());
-		String hashed12 = BCrypt.hashpw(getPassword(), BCrypt.gensalt(12));
-		
-		assertNotEquals(hashed, hashed12);
-		
-		assertTrue(BCrypt.checkpw(getPassword(), hashed));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed12));
+	protected Integer getDefaultRounds() {
+		return 12;
 	}
-	
-	@Test
-	public void testDiferentesSALTs_Mesmo_Hash2() {
-		String salt_10 = BCrypt.gensalt();
-		String salt_10_2 = BCrypt.gensalt();
-		String salt_11 = BCrypt.gensalt(11);
-		String salt_11_2 = BCrypt.gensalt(11);
-		
-		assertNotEquals(salt_10, salt_10_2);
-		assertNotEquals(salt_11, salt_11_2);
-		assertNotEquals(salt_10, salt_11);
-		
-		String hashed_10 = BCrypt.hashpw(getPassword(), salt_10);
-		String hashed_10_2 = BCrypt.hashpw(getPassword(), salt_10_2);
-		String hashed_11 = BCrypt.hashpw(getPassword(), salt_11);
-		String hashed_11_2 = BCrypt.hashpw(getPassword(), salt_11_2);
-		
-		assertNotEquals(hashed_10, hashed_10_2);
-		assertNotEquals(hashed_11, hashed_11_2);
-		assertNotEquals(hashed_10, hashed_11);
-		
-		assertTrue(BCrypt.checkpw(getPassword(), hashed_10));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed_10_2));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed_11));
-		assertTrue(BCrypt.checkpw(getPassword(), hashed_11_2));
+
+	@Override
+	protected Pattern getHashRegex() {
+		// Examples:
+        // ------------------------------
+        // SALT                         |
+        // ------------------------------
+        // $2a$11$lw27.WF3yC06eDo3vE2IT.
+		// $2a$12$II7qngXYw75StAYaLWdx7u3mjs8JpbiHKlh1mGkI/ZBVE9P3AaUHK
+		// $2a$12$ybG4IsD.KcjKPSkpmV61RumLmHTZHDjPCvMZjUAcsoIDDxh5EpYqO
+		// $2a$12$KPK3NKKJl.D6L73pvi3mOehhSHw8gSd/SVSrlqubO17jHFYldU9vu
+		// $2a$12$3gFCgGysMCFSgF6zlMh1NuZuAzCqKDbeZlOMJm5Flh3GmHhpAVtIK
+		// $2a$12$CBBx.Hqu1S37ZhUjFBLFwul2wy1RCV.pUPGSp8XUwWqHq1zOB7cXO
+		// $2a$12$5pBcwFoUwX0mCRR1bnSd7OcCWj8xdNJvCwMEhNVpgNgjZFUiPsQai
+		// $2a$12$MftLt1eCU4LB1tHFP5/Eb.4X2S1U4eiZm3BKCHKpY91PPQsZUxkFi
+		// $2a$12$usFj.52jm1YhTxpRIsyLrOD4xYrAwimrlGdbqEin01R2OwEaB0QQm
+
+		return Pattern.compile("^\\$(\\w+)\\$(\\d+)\\$(.+)$");
 	}
+
 }

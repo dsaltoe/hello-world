@@ -1,17 +1,21 @@
 package davi.hashpassword.base;
 
 import static davi.hashpassword.base.TestUtils.getPassword;
+import static davi.hashpassword.base.TestUtils.getPassword2;
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
-import davi.hashpassword.KeyStretchingPasswordEncoder;
+import davi.hashpassword.KeyStretchingPasswordManager;
 
-public abstract class AbstractKeyStretchingTest extends AbstractPasswordEncoderTest<KeyStretchingPasswordEncoder> {
+import java.util.regex.Matcher;
+
+public abstract class AbstractKeyStretchingTest extends AbstractPasswordEncoderTest<KeyStretchingPasswordManager> {
 
 	@Test
-	public void differentHashsForEqualPasswordsTest() {
-		String hashed1 = alg.encode(getPassword());
-		String hashed2 = alg.encode(getPassword());
+	public void equalPasswordsWithDifferentSaltsGenerateDifferentHashes() {
+		String hashed1 = alg.hash(getPassword());
+		String hashed2 = alg.hash(getPassword());
 
 		assertNotEquals(hashed1, hashed2);
 		
@@ -21,10 +25,10 @@ public abstract class AbstractKeyStretchingTest extends AbstractPasswordEncoderT
 
 	@Override
 	@Test
-	public void sameHashForEqualPasswordsTest() {
+	public void equalPasswordsAndSaltsGenerateSameHashes() {
 		String salt = alg.genSalt();
-		String hashed1 = alg.encode(getPassword(), salt);
-		String hashed2 = alg.encode(getPassword(), salt);
+		String hashed1 = alg.hash(getPassword(), salt);
+		String hashed2 = alg.hash(getPassword(), salt);
 		
 		assertEquals(hashed1, hashed2);
 	
@@ -33,35 +37,37 @@ public abstract class AbstractKeyStretchingTest extends AbstractPasswordEncoderT
 	}
 
 	@Test
-	public abstract void differentHashsForSamePasswordWithDifferentRoundsTest();
-	
-	@Test
-	public void mesmo_salt_gera_dois_hashes_iguais() {
-		String salt = alg.genSalt();
-		
-		String hashed1 = alg.encode(getPassword(), salt);
-		String hashed2 = alg.encode(getPassword(), salt);
-		
-		assertEquals(hashed1, hashed2);
-	
-		assertTrue(alg.matches(getPassword(), hashed1));
-		assertTrue(alg.matches(getPassword(), hashed2));
-	}
+	public void equalPasswordsWithDifferentRoundsTest() {
+		KeyStretchingPasswordManager alg1 = createAlg(getDefaultRounds() + 1);
+		KeyStretchingPasswordManager alg2 = createAlg(getDefaultRounds() + 2);
+		KeyStretchingPasswordManager alg3 = createAlg(getDefaultRounds() + 3);
 
-	@Test
-	public void test_gensalt_dinamico() {
-		String salt1 = alg.genSalt();
-		String salt2 = alg.genSalt();
-		
-		assertNotEquals(salt1, salt2);
-		
-		String hashed1 = alg.encode(getPassword(), salt1);
-		String hashed2 = alg.encode(getPassword(), salt2);
-		
+		String hashed1 = alg1.hash(getPassword(), alg.genSalt());
+		String hashed2 = alg2.hash(getPassword(), alg.genSalt());
+
 		assertNotEquals(hashed1, hashed2);
-	
-		assertTrue(alg.matches(getPassword(), hashed1));
-		assertTrue(alg.matches(getPassword(), hashed2));
+
+		assertTrue(alg1.matches(getPassword(), hashed1));
+		assertTrue(alg1.matches(getPassword(), hashed2));
+		assertTrue(alg2.matches(getPassword(), hashed1));
+		assertTrue(alg2.matches(getPassword(), hashed2));
+		assertTrue(alg3.matches(getPassword(), hashed1));
+		assertTrue(alg3.matches(getPassword(), hashed2));
+
+		assertFalse(alg1.matches(getPassword2(), hashed1));
+		assertFalse(alg1.matches(getPassword2(), hashed2));
+		assertFalse(alg2.matches(getPassword2(), hashed1));
+		assertFalse(alg2.matches(getPassword2(), hashed2));
+		assertFalse(alg3.matches(getPassword2(), hashed1));
+		assertFalse(alg3.matches(getPassword2(), hashed2));
 	}
+
+	@Test
+	public void hashedPasswordDataFormat() {
+		String hashedPassword = alg.hash(getPassword());
+		Matcher matcher = getHashRegex().matcher(hashedPassword);
+		assertTrue(matcher.matches(), "Unexpected hashed password data: " + hashedPassword);
+	}
+
 
 }

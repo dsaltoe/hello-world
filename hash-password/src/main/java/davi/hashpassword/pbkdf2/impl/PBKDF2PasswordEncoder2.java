@@ -10,10 +10,10 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 import davi.hashpassword.CryptUtils;
-import davi.hashpassword.KeyStretchingPasswordEncoder;
+import davi.hashpassword.KeyStretchingPasswordManager;
 import davi.hashpassword.SecureRandomBytesKeyGenerator;
 
-public class PBKDF2PasswordEncoder2 implements KeyStretchingPasswordEncoder {
+public class PBKDF2PasswordEncoder2 implements KeyStretchingPasswordManager {
 	public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA512";
 
 	// The following constants may be changed without breaking existing hashes.
@@ -48,7 +48,7 @@ public class PBKDF2PasswordEncoder2 implements KeyStretchingPasswordEncoder {
 		this.hashByteSize = hashByteSize;
 	}
 
-	private String encode(String password, byte[] salt) {
+	private String hash(String password, byte[] salt) {
 		byte[] hash = pbkdf2(password.toCharArray(), salt, iterations, hashByteSize);
 		
 		// format iterations:salt:hash
@@ -66,21 +66,21 @@ public class PBKDF2PasswordEncoder2 implements KeyStretchingPasswordEncoder {
 	}
 	
 	@Override
-	public String encode(String password) {
+	public String hash(String password) {
 		byte[] salt = getSecureRandom().generateKey();
-		return encode(password, salt);
+		return hash(password, salt);
 	}
 
 	@Override
-	public String encode(String password, String salt) {
+	public String hash(String password, String salt) {
 		byte[] saltAsBytes = CryptUtils.fromHex(salt);
-		return encode(password, saltAsBytes);
+		return hash(password, saltAsBytes);
 	}
 
 	@Override
-	public boolean matches(String password, String encodedPassword) {
+	public boolean matches(String password, String hashedPasswordData) {
 		// Decode the hash into its parameters
-		String[] params = encodedPassword.split(":");
+		String[] params = hashedPasswordData.split(":");
 		int iterations = Integer.parseInt(params[ITERATION_INDEX]);
 		byte[] salt = fromHex(params[SALT_INDEX]);
 		byte[] hash = fromHex(params[PBKDF2_INDEX]);

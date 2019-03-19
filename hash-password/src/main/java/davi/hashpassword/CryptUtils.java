@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public final class CryptUtils {
 
-	public CryptUtils() {
+	private CryptUtils() {
 	}
 
 	/**
